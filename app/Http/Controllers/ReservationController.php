@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Trip;
 use Inertia\Inertia;
 use App\Models\Client;
+use App\Models\Booking;
 use App\Models\Deceased;
 use App\Models\BurialPlot;
 use App\Models\Reservation;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
@@ -17,17 +20,14 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        $reservations = Reservation::with(['client', 'deceased', 'burial_plot', 'payments'])->orderBy('created_at', 'desc')->get();
-        $clients = Client::all();
-        $deceaseds = Deceased::all();
-        $burial_plots = BurialPlot::whereIn('status', ['Available', 'Reserved'])->get();
+        $bookings = Booking::whereHas('trip', function ($query) {
+            $query->whereNotIn('status', ['completed', 'canceled']);
+        })
+        ->get();
 
         return Inertia::render('Reservation',
         [
-            'reservations' => $reservations,
-            'clients' => $clients,
-            'deceaseds' => $deceaseds,
-            'burial_plots' => $burial_plots,
+            'bookings' => $bookings,
         ]);
     }
 

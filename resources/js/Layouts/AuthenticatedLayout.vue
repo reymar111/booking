@@ -222,7 +222,7 @@ export default {
           class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700"
         >
             <span class="ml-2">Reports</span>
-            <li>
+            <!-- <li>
                 <Link
                     :href="route('report.reservation_summary')"
                     class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
@@ -286,7 +286,7 @@ export default {
 
                     <span class="ml-3">Revenue Report</span>
                 </Link>
-            </li>
+            </li> -->
 
 
         </ul>

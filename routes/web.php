@@ -68,6 +68,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', [BookingController::class, 'store'])->name('booking.store');
         Route::patch('/update/{booking}', [BookingController::class, 'update'])->name('booking.update');
         Route::delete('/destroy/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
+        Route::patch('/accept/{booking}', [BookingController::class, 'accept'])->name('booking.accept');
+        Route::patch('/cancel/{booking}', [BookingController::class, 'cancel'])->name('booking.cancel');
     });
 
     // NEW SETTINGS

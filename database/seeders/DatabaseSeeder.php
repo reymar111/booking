@@ -66,7 +66,7 @@ class DatabaseSeeder extends Seeder
         $vehicles = Vehicle::pluck('id')->toArray();
         $drivers = Driver::pluck('id')->toArray();
 
-        foreach (range(1, 10) as $index) {
+        foreach (range(1, 50) as $index) {
             $origin = $faker->randomElement(['Tabuk', 'Tuguegarao']);
             $destination = ($origin === 'Tabuk') ? 'Tuguegarao' : 'Tabuk'; // Ensure alternate values
 

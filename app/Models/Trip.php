@@ -10,6 +10,8 @@ class Trip extends Model
 
     protected $with = ['vehicle', 'driver'];
 
+    protected $appends = ['departure_time_v'];
+
     public function vehicle()
     {
 
@@ -24,12 +26,19 @@ class Trip extends Model
 
     }
 
-    // public function getDepartureTimeAttribute()
-    // {
+    public function getDepartureTimeVAttribute()
+    {
 
-    //     return $this->attributes['departure_time']
-    //     ? \Carbon\Carbon::parse($this->attributes['departure_time'])->format('h:i A')
-    //     : null;
+        return $this->attributes['departure_time']
+        ? \Carbon\Carbon::parse($this->attributes['departure_time'])->format('h:i A')
+        : null;
 
-    // }
+    }
+
+    public function bookings()
+    {
+
+        return $this->hasMany(Booking::class, 'trip_id', 'id');
+
+    }
 }
