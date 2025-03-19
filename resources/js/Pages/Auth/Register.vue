@@ -11,6 +11,7 @@ const form = useForm({
     email: '',
     password: '',
     password_confirmation: '',
+    contact_number: '',
 });
 
 const submit = () => {
@@ -36,6 +37,22 @@ const submit = () => {
                     required
                     autofocus
                     autocomplete="name"
+                />
+
+                <InputError class="mt-2" :message="form.errors.name" />
+            </div>
+
+            <div>
+                <InputLabel for="contact_number" value="Contact Number" />
+
+                <TextInput
+                    id="contact_number"
+                    type="number"
+                    class="mt-1 block w-full"
+                    v-model="form.contact_number"
+                    required
+                    autofocus
+                    autocomplete="contact_number"
                 />
 
                 <InputError class="mt-2" :message="form.errors.name" />

@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Client;
-use App\Models\Deceased;
-use App\Models\BurialPlot;
-use App\Models\BurialType;
-use App\Models\Reservation;
+use Carbon\Carbon;
+use App\Models\Trip;
+use App\Models\Driver;
+use App\Models\Vehicle;
 use Faker\Factory as Faker;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
@@ -26,6 +25,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'John Doe',
                 'email' => 'admin@admin.com',
                 'password' => bcrypt('1234567890'),
+                'contact_number' => '09123456789',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'John Doe',
                 'email' => 'user@user.com',
                 'password' => bcrypt('1234567890'),
+                'contact_number' => '09123456789',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -42,75 +43,42 @@ class DatabaseSeeder extends Seeder
             DB::table('users')->insert($user);
         }
 
-        $client = Faker::create();
-
-        for ($i = 0; $i < 50; $i++) {
-            Client::create([
-                'full_name' => $client->name,
-                'contact_number' => $client->phoneNumber,
-                'address' => $client->address,
-            ]);
-        }
-
-        $burial_types = [
-            ['name' => 'Single Slot', 'price' => '50000'],
-            ['name' => 'Niches', 'price' => '75000'],
-            ['name' => 'Family Mausuleum', 'price' => '200000'],
-        ];
-
-        foreach($burial_types as $burial) {
-            BurialType::create([
-                'name' => $burial['name'],
-                'price' => $burial['price']
-            ]);
-        }
-
         $faker = Faker::create();
 
-        for ($i = 0; $i < 50; $i++) {
-            BurialPlot::create([
-                'plot_number' => 'PN-' . strtoupper(Str::random(6)), // Unique alphanumeric plot number
-                'size' => $faker->randomElement(['3x6', '4x8', '5x10']), // Random sizes
-                'burial_type_id' => mt_rand(1, 3), // Assuming 5 burial types exist
-                'status' => $faker->randomElement(['available', 'reserved', 'occupied']),
-
+        foreach (range(1, 10) as $index) {
+            Vehicle::create([
+                'plate_number' => strtoupper($faker->bothify('??###??')),
+                'brand' => $faker->randomElement(['Toyota', 'Honda', 'Ford', 'Nissan', 'Chevrolet']),
+                'model' => $faker->word(),
+                'capacity' => $faker->numberBetween(1, 15),
+                'status' => $faker->randomElement(['active', 'maintenance', 'inactive']),
             ]);
         }
 
-        $death = Faker::create();
-
-        for ($i = 0; $i < 50; $i++) {
-            $birthDate = $death->date('Y-m-d', '-40 years'); // At least 40 years ago
-            $deathDate = $death->date('Y-m-d', '-1 years'); // Died at least 1 year ago
-
-            // Nullable burial date (sometimes null, sometimes a date after death)
-            $burialDate = $death->boolean(80) ? $death->dateTimeBetween($deathDate, 'now')->format('Y-m-d') : null;
-
-            Deceased::create([
-                'full_name' => $death->name,
-                'birth_date' => $birthDate,
-                'death_date' => $deathDate,
-                'cause_of_death' => $death->optional()->sentence(),
-                'burial_date' => $burialDate,
+        foreach (range(1, 10) as $index) {
+            Driver::create([
+                'full_name' => $faker->name(),
+                'contact_number' => $faker->optional()->phoneNumber(),
+                'license_number' => strtoupper($faker->bothify('???-######')),
             ]);
         }
 
-        $faker = Faker::create();
+        $vehicles = Vehicle::pluck('id')->toArray();
+        $drivers = Driver::pluck('id')->toArray();
 
-        // Get all existing IDs for relationships
-        $clientIds = Client::pluck('id')->toArray();
-        $deceasedIds = Deceased::pluck('id')->toArray();
-        $burialPlotIds = BurialPlot::pluck('id')->toArray();
+        foreach (range(1, 10) as $index) {
+            $origin = $faker->randomElement(['Tabuk', 'Tuguegarao']);
+            $destination = ($origin === 'Tabuk') ? 'Tuguegarao' : 'Tabuk'; // Ensure alternate values
 
-        for ($i = 0; $i < 50; $i++) {
-            Reservation::create([
-                'code' => 'BR-' . strtoupper(Str::random(8)), // Unique reservation code
-                'client_id' => $faker->randomElement($clientIds),
-                'deceased_id' => $faker->randomElement($deceasedIds),
-                'burial_plot_id' => $faker->randomElement($burialPlotIds),
-                'status' => $faker->randomElement(['Pending', 'Confirmed', 'Completed', 'Canceled']),
-                'mode_of_payment' => $faker->randomElement(['Full', 'Installment']),
-                'total_amount' => $faker->randomFloat(2, 5000, 50000), // Amount between 5,000 and 50,000
+            Trip::create([
+                'trip_code' => strtoupper($faker->bothify('TRIP-#####')),
+                'vehicle_id' => $faker->randomElement($vehicles),
+                'driver_id' => $faker->randomElement($drivers),
+                'origin' => $origin,
+                'destination' => $destination,
+                'departure_date' => Carbon::now()->addDays($faker->numberBetween(1, 30))->format('Y-m-d'), // Future date
+                'departure_time' => $faker->time(),
+                'status' => $faker->randomElement(['scheduled', 'ongoing', 'completed', 'canceled']),
             ]);
         }
 

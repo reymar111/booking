@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AcademicYearController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BurialPlotController;
 use App\Http\Controllers\BurialTypeController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\DeceasedController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\OffenseLevelController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PenaltyActionController;
@@ -19,7 +21,9 @@ use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TransactionViolationController;
+use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ViolationCategoryController;
 use App\Http\Controllers\ViolationController;
 use App\Http\Controllers\YearLevelController;
@@ -50,7 +54,47 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // trip
+    Route::prefix('trip')->group(function() {
+        Route::get('/',[TripController::class, 'index'])->name('trip.index');
+        Route::post('/store', [TripController::class, 'store'])->name('trip.store');
+        Route::patch('/update/{trip}', [TripController::class, 'update'])->name('trip.update');
+        Route::delete('/destroy/{trip}', [TripController::class, 'destroy'])->name('trip.destroy');
+    });
+
+    // booking
+    Route::prefix('booking')->group(function() {
+        Route::get('/',[BookingController::class, 'index'])->name('booking.index');
+        Route::post('/store', [BookingController::class, 'store'])->name('booking.store');
+        Route::patch('/update/{booking}', [BookingController::class, 'update'])->name('booking.update');
+        Route::delete('/destroy/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
+    });
+
     // NEW SETTINGS
+
+    // vehicle
+    Route::prefix('vehicle')->group(function() {
+        Route::get('/',[VehicleController::class, 'index'])->name('vehicle.index');
+        Route::post('/store', [VehicleController::class, 'store'])->name('vehicle.store');
+        Route::patch('/update/{vehicle}', [VehicleController::class, 'update'])->name('vehicle.update');
+        Route::delete('/destroy/{vehicle}', [VehicleController::class, 'destroy'])->name('vehicle.destroy');
+    });
+
+    // driver
+    Route::prefix('driver')->group(function() {
+        Route::get('/',[DriverController::class, 'index'])->name('driver.index');
+        Route::post('/store', [DriverController::class, 'store'])->name('driver.store');
+        Route::patch('/update/{driver}', [DriverController::class, 'update'])->name('driver.update');
+        Route::delete('/destroy/{driver}', [DriverController::class, 'destroy'])->name('driver.destroy');
+    });
+
+
+
+
+
+
+
+
 
     //client
     Route::prefix('client')->group(function() {
