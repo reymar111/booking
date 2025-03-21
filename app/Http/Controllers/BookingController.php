@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Trip;
 use Inertia\Inertia;
 use App\Models\Booking;
+use App\Notifications\BookingStatus;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -117,6 +118,9 @@ class BookingController extends Controller
         $booking->status = 'confirmed';
         $booking->update();
 
+        $booking->user->notify(new BookingStatus($booking, 'confirmed'));
+
+
         return to_route('reservation.index');
 
     }
@@ -126,6 +130,8 @@ class BookingController extends Controller
 
         $booking->status = 'canceled';
         $booking->update();
+
+        $booking->user->notify(new BookingStatus($booking, 'canceled'));
 
         return to_route('reservation.index');
 

@@ -7,10 +7,10 @@
                 <div
                     class="overflow-hidden bg-white shadow-lg sm:rounded-lg"
                 >
-                <div class="p-6 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 ">
-                    <h3 class="text-2xl font-bold ">Settings - User</h3>
-
+                <div class="p-6 mb-5 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 border-b border-gray-300 shadow">
+                    <h3 class="text-2xl font-bold">Settings - User</h3>
                 </div>
+
 
                 <div class="px-6 pb-6 overflow-x-auto bg-white shadow-md rounded-lg mt-0">
                     <div v-if="is_created" id="alert-border-1" class="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 " role="alert">
@@ -122,8 +122,6 @@
 
                 </div>
             </div>
-
-
         </div>
 
         <!-- Main modal -->
@@ -156,6 +154,10 @@
                         <div>
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
                             <input v-model="form.password" type="password" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required />
+                        </div>
+                        <div>
+                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 ">Contact Number</label>
+                            <input v-model="form.contact_number" type="number" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required />
                         </div>
                         <div>
                             <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
@@ -232,6 +234,7 @@ export default {
                 email: '',
                 password: '',
                 role: '',
+                contact_number: '',
                 active: false,
                 is_editing: false,
             }),
@@ -253,6 +256,7 @@ export default {
             roles: [
                 {key: 'admin', value: 'Admin'},
                 {key: 'staff', value: 'Staff'},
+                {key: 'passenger', value: 'Passenger'},
             ]
 
 
@@ -277,6 +281,7 @@ export default {
             this.form.id = ''
             this.form.name = ''
             this.form.email = ''
+            this.form.contact_number = ''
             this.form.password = ''
             this.form.role = ''
             this.form.active = true
@@ -288,6 +293,7 @@ export default {
             this.form.name = ''
             this.form.email = ''
             this.form.password = ''
+            this.form.contact_number = ''
             this.form.role = ''
             this.form.active = false
             this.form.is_editing = false
@@ -295,9 +301,10 @@ export default {
 
         editItem(item) {
             this.form.id = item.id
-            this.form.name = item.role
-            this.form.email = item.role
+            this.form.name = item.name
+            this.form.email = item.email
             this.form.role = item.role
+            this.form.contact_number = item.contact_number
             this.form.active = true
             this.form.is_editing = true
         },

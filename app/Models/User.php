@@ -23,6 +23,9 @@ class User extends Authenticatable
         'password',
     ];
 
+    protected $with = ['unreadNotifications', 'notifications'];
+
+    protected $appends = ['unread_notifications_count'];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -45,4 +48,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function getUnreadNotificationsCountAttribute()
+    {
+
+        return $this->unreadNotifications->count();
+
+    }
+
 }

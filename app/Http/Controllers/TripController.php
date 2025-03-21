@@ -26,7 +26,7 @@ class TripController extends Controller
             return $trip;
         });
 
-        $vehicles = Vehicle::all();
+        $vehicles = Vehicle::where('status', 'active')->get();
         $drivers = Driver::all();
 
         return Inertia::render('Trip',

@@ -8,117 +8,185 @@ use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
-    public function reservationSummary()
+    public function reservationSummary(Request $request)
     {
-        $data = DB::table('reservations as r')
-            ->join('clients as c', 'r.client_id', '=', 'c.id')
-            ->join('deceaseds as d', 'r.deceased_id', '=', 'd.id')
-            ->join('burial_plots as b', 'r.burial_plot_id', '=', 'b.id')
-            ->leftJoin('payments as p', 'r.id', '=', 'p.reservation_id')
+
+        // Retrieve date range from request
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $query = DB::table('bookings')
+            ->join('trips', 'bookings.trip_id', '=', 'trips.id') // Join with trips to get departure_date
             ->select(
-                'r.id as reservation_id',
-                'r.code as reservation_code',
-                'c.full_name as client_name',
-                'd.full_name as deceased_name',
-                'b.plot_number as burial_plot',
-                'r.status',
-                'r.mode_of_payment',
-                'r.total_amount',
-                DB::raw('COALESCE(SUM(p.amount), 0) as total_paid'),
-                DB::raw('(r.total_amount - COALESCE(SUM(p.amount), 0)) as balance_due'),
-                'r.created_at as reservation_date'
-            )
-            ->groupBy('r.id', 'c.full_name', 'd.full_name', 'b.plot_number')
-            ->get();
+                DB::raw("COUNT(*) as total_reservations"),
+                DB::raw("SUM(CASE WHEN bookings.status = 'pending' THEN 1 ELSE 0 END) as pending_reservations"),
+                DB::raw("SUM(CASE WHEN bookings.status = 'confirmed' THEN 1 ELSE 0 END) as confirmed_reservations"),
+                DB::raw("SUM(CASE WHEN bookings.status = 'completed' THEN 1 ELSE 0 END) as completed_reservations"),
+                DB::raw("SUM(CASE WHEN bookings.status = 'canceled' THEN 1 ELSE 0 END) as canceled_reservations")
+            );
 
-            return Inertia::render('Report/ReservationSummary',
-            [
-                'data' => $data,
-            ]);
+        // Apply date filter if provided
+        if ($startDate && $endDate) {
+            $query->whereBetween('trips.departure_date', [$startDate, $endDate]);
+        }
+
+        $data = $query->first();
+
+        return Inertia::render('Report/ReservationSummary', [
+            'data' => $data,
+        ]);
     }
 
-    public function generatePaymentReport()
+    public function vehicleUtilizationReport(Request $request)
     {
-        $data = DB::table('payments as p')
-            ->join('reservations as r', 'p.reservation_id', '=', 'r.id')
-            ->join('clients as c', 'r.client_id', '=', 'c.id')
+        // Retrieve date range from request
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $query = DB::table('trips')
+            ->join('vehicles', 'trips.vehicle_id', '=', 'vehicles.id') // Join with vehicles to get details
             ->select(
-                'p.id as payment_id',
-                'r.code as reservation_code',
-                'c.full_name as client_name',
-                'p.amount as payment_amount',
-                'r.total_amount',
-                DB::raw('(r.total_amount - SUM(p.amount)) as remaining_balance'),
-                'p.created_at as payment_date'
+                'vehicles.plate_number',
+                'vehicles.model',
+                'vehicles.capacity',
+                'vehicles.status',
+                DB::raw("COUNT(trips.id) as total_trips")
             )
-            ->groupBy('p.id', 'r.code', 'c.full_name', 'p.amount', 'r.total_amount')
-            ->get();
+            ->groupBy('vehicles.id', 'vehicles.plate_number', 'vehicles.model', 'vehicles.capacity', 'vehicles.status');
 
-            return Inertia::render('Report/PaymentReport',
-            [
-                'data' => $data,
-            ]);
+        // Apply date filter if provided
+        if ($startDate && $endDate) {
+            $query->whereBetween('trips.departure_date', [$startDate, $endDate]);
+        }
+
+        $data = $query->get();
+
+        return Inertia::render('Report/VehicleUtilization', [
+            'data' => $data,
+            'filters' => [
+                'start_date' => $startDate,
+                'end_date' => $endDate
+            ]
+        ]);
     }
 
-    public function generateAvailablePlotsReport()
+    public function tripPerformanceReport(Request $request)
     {
-        $data = DB::table('burial_plots as b')
-            ->join('burial_types as t', 'b.burial_type_id', '=', 't.id')
-            ->select('b.plot_number', 't.name as burial_type', 'b.size', 'b.status')
-            ->where('b.status', 'Available')
-            ->orderBy('t.name')
-            ->orderBy('b.plot_number')
-            ->get();
+        // Retrieve date range from request
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-            return Inertia::render('Report/AvailableBurialPlot',
-            [
-                'data' => $data,
-            ]);
-    }
-
-    public function generateDeceasedBurialReport()
-    {
-        $data = DB::table('deceaseds as d')
-            ->join('reservations as r', 'd.id', '=', 'r.deceased_id')
-            ->join('burial_plots as b', 'r.burial_plot_id', '=', 'b.id')
-            ->join('burial_types as t', 'b.burial_type_id', '=', 't.id')
+        $query = DB::table('trips')
             ->select(
-                'd.id',
-                'd.full_name as deceased_name',
-                'd.birth_date',
-                'd.death_date',
-                'd.cause_of_death',
-                'd.burial_date',
-                'b.plot_number',
-                't.name as burial_type'
+                'origin',
+                'destination',
+                DB::raw("COUNT(id) as total_trips"),
+                DB::raw("SUM(CASE WHEN status = 'scheduled' THEN 1 ELSE 0 END) as scheduled_trips"),
+                DB::raw("SUM(CASE WHEN status = 'ongoing' THEN 1 ELSE 0 END) as ongoing_trips"),
+                DB::raw("SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed_trips"),
+                DB::raw("SUM(CASE WHEN status = 'canceled' THEN 1 ELSE 0 END) as canceled_trips"),
+                DB::raw("SUM(CASE WHEN departure_time <= NOW() THEN 1 ELSE 0 END) as on_time_trips"),
+                DB::raw("SUM(CASE WHEN departure_time > NOW() THEN 1 ELSE 0 END) as delayed_trips")
             )
-            ->orderBy('d.burial_date', 'DESC')
-            ->get();
+            ->groupBy('origin', 'destination');
 
-            return Inertia::render('Report/DeceasedBurialReport',
-            [
-                'data' => $data,
-            ]);
+        // Apply date filter if provided
+        if ($startDate && $endDate) {
+            $query->whereBetween('departure_date', [$startDate, $endDate]);
+        }
+
+        $data = $query->get();
+
+        return Inertia::render('Report/TripPerformance', [
+            'data' => $data,
+            'filters' => [
+                'start_date' => $startDate,
+                'end_date' => $endDate
+            ]
+        ]);
     }
 
-    public function generateRevenueReport()
-    {
-        $data = DB::table('payments as p')
-        ->select(
-            DB::raw("YEAR(p.created_at) as year"),
-            DB::raw("MONTHNAME(p.created_at) as month"),
-            DB::raw("MONTH(p.created_at) as month_number"),
-            DB::raw('SUM(p.amount) as total_revenue')
-        )
-        ->groupBy('year', 'month', 'month_number')
-        ->orderBy('year', 'DESC')
-        ->orderBy('month_number', 'DESC') // Uses the month number for proper ordering
-        ->get();
 
-            return Inertia::render('Report/RevenueReport',
-            [
-                'data' => $data,
-            ]);
+    public function driverActivityReport(Request $request)
+    {
+        // Retrieve date range from request
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $query = DB::table('trips')
+            ->join('drivers', 'trips.driver_id', '=', 'drivers.id') // Join with drivers table
+            ->select(
+                'drivers.full_name',
+                'drivers.license_number',
+                'drivers.contact_number',
+                DB::raw("COUNT(trips.id) as total_trips"),
+                DB::raw("SUM(CASE WHEN trips.status = 'scheduled' THEN 1 ELSE 0 END) as scheduled_trips"),
+                DB::raw("SUM(CASE WHEN trips.status = 'ongoing' THEN 1 ELSE 0 END) as ongoing_trips"),
+                DB::raw("SUM(CASE WHEN trips.status = 'completed' THEN 1 ELSE 0 END) as completed_trips"),
+                DB::raw("SUM(CASE WHEN trips.status = 'canceled' THEN 1 ELSE 0 END) as canceled_trips")
+            )
+            ->groupBy('drivers.id', 'drivers.full_name', 'drivers.license_number', 'drivers.contact_number');
+
+        // Apply date filter if provided
+        if ($startDate && $endDate) {
+            $query->whereBetween('trips.departure_date', [$startDate, $endDate]);
+        }
+
+        $data = $query->get();
+
+        return Inertia::render('Report/DriverActivity', [
+            'data' => $data,
+            'filters' => [
+                'start_date' => $startDate,
+                'end_date' => $endDate
+            ]
+        ]);
+    }
+
+    public function bookingLoadReport(Request $request)
+    {
+        // Retrieve date range from request
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $query = DB::table('bookings')
+            ->join('trips', 'bookings.trip_id', '=', 'trips.id') // Join with trips to get trip details
+            ->join('vehicles', 'trips.vehicle_id', '=', 'vehicles.id') // Join with vehicles to get capacity
+            ->select(
+                'trips.origin',
+                'trips.destination',
+                'trips.departure_date',
+                'trips.departure_time',
+                'vehicles.plate_number',
+                'vehicles.capacity',
+                DB::raw("COUNT(bookings.id) as total_bookings"),
+                DB::raw("(vehicles.capacity - COUNT(bookings.id)) as available_seats"),
+                DB::raw("ROUND((COUNT(bookings.id) / vehicles.capacity) * 100, 2) as load_percentage")
+            )
+            ->groupBy(
+                'trips.id',
+                'trips.origin',
+                'trips.destination',
+                'trips.departure_date',
+                'trips.departure_time',
+                'vehicles.plate_number',
+                'vehicles.capacity'
+            );
+
+        // Apply date filter if provided
+        if ($startDate && $endDate) {
+            $query->whereBetween('trips.departure_date', [$startDate, $endDate]);
+        }
+
+        $data = $query->get();
+
+        return Inertia::render('Report/BookingLoad', [
+            'data' => $data,
+            'filters' => [
+                'start_date' => $startDate,
+                'end_date' => $endDate
+            ]
+        ]);
     }
 
 }

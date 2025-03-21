@@ -2,14 +2,15 @@
     <AuthenticatedLayout>
         <Head title="Reservations" />
 
-        <div class="py-12">
+        <div class="py-1">
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div
                     class="overflow-hidden bg-white shadow-lg sm:rounded-lg"
                 >
-                <div class="p-6 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 ">
-                    <h3 class="text-2xl font-bold ">Reservations</h3>
+                <div class="p-6 mb-5 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 border-b border-gray-300 shadow">
+                    <h3 class="text-2xl font-bold">Reservations</h3>
                 </div>
+
 
                 <div class="px-6 pb-6 overflow-x-auto bg-white shadow-md rounded-lg mt-0">
                     <div v-if="is_canceled" id="alert-border-1" class="flex items-center p-4 mb-4 text-teal-800 border-t-4 border-teal-300 bg-teal-50 " role="alert">
@@ -19,7 +20,7 @@
                         <div class="ms-3 text-sm font-medium">
                             Reservation Canceled
                         </div>
-                        <button @click="is_updated = false" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-teal-50 text-teal-500 rounded-lg focus:ring-2 focus:ring-teal-400 p-1.5 hover:bg-teal-200 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#alert-border-1" aria-label="Close">
+                        <button @click="is_canceled = false" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-teal-50 text-teal-500 rounded-lg focus:ring-2 focus:ring-teal-400 p-1.5 hover:bg-teal-200 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#alert-border-1" aria-label="Close">
                             <span class="sr-only">Dismiss</span>
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -34,7 +35,7 @@
                         <div class="ms-3 text-sm font-medium">
                             Reservation Confirmed
                         </div>
-                        <button @click="is_updated = false" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-indigo-50 text-indigo-500 rounded-lg focus:ring-2 focus:ring-indigo-400 p-1.5 hover:bg-indigo-200 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#alert-border-1" aria-label="Close">
+                        <button @click="is_confirmed = false" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-indigo-50 text-indigo-500 rounded-lg focus:ring-2 focus:ring-indigo-400 p-1.5 hover:bg-indigo-200 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#alert-border-1" aria-label="Close">
                             <span class="sr-only">Dismiss</span>
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -92,7 +93,7 @@
                                 <td class="px-4 py-2">{{ item.trip != null ? item.trip.origin : '' }} -> {{ item.trip != null ? item.trip.destination : '' }}</td>
                                 <td class="px-4 py-2">{{ item.trip != null && item.trip.vehicle != null ? item.trip.vehicle.plate_number : '' }}</td>
                                 <td class="px-4 py-2">{{ item.seat_number }}</td>
-                                <td class="px-4 py-2">{{ item.trip != null ? item.trip.departure_date : '' }} | {{ item.trip != null ? item.trip.departure_time_v : '' }}</td>
+                                <td class="px-4 py-2">{{ item.trip != null ? item.trip.departure_date_v : '' }} | {{ item.trip != null ? item.trip.departure_time_v : '' }}</td>
                                 <td class="px-4 py-2">{{ item.status }}</td>
                                 <td class="px-4 py-2 flex space-x-2">
                                     <button type="button" @click="accept(item.id)" v-if="item.status == 'pending'" class="px-1 py-1 text-white bg-green-700 hover:bg-green-800 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
@@ -174,29 +175,6 @@ export default {
         openForm() {
             this.form.active = true
             this.form.is_editing = false
-        },
-
-        closeForm() {
-            this.form.id = ''
-            this.form.code = ''
-            this.form.client_id = ''
-            this.form.deceased_id = ''
-            this.form.burial_plot_id = ''
-            this.form.mode_of_payment = ''
-            this.form.active = false
-            this.form.is_editing = false
-        },
-
-        editItem(item) {
-            console.log(item)
-            this.form.id = item.id
-            this.form.code = item.code
-            this.form.client_id = item.client_id
-            this.form.deceased_id = item.deceased_id
-            this.form.burial_plot_id = item.burial_plot_id
-            this.form.mode_of_payment = item.mode_of_payment
-            this.form.active = true
-            this.form.is_editing = true
         },
 
         OpenDeleteForm(item) {

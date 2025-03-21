@@ -7,10 +7,10 @@
                 <div
                     class="overflow-hidden bg-white shadow-lg sm:rounded-lg"
                 >
-                <div class="p-6 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 ">
-                    <h3 class="text-2xl font-bold ">Settings - Drivers</h3>
-
+                <div class="p-6 mb-5 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 border-b border-gray-300 shadow">
+                    <h3 class="text-2xl font-bold">Settings - Drivers</h3>
                 </div>
+
 
                 <div class="px-6 pb-6 overflow-x-auto bg-white shadow-md rounded-lg mt-0">
                     <div v-if="is_created" id="alert-border-1" class="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 " role="alert">

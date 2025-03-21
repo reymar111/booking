@@ -7,9 +7,8 @@
                 <div
                     class="overflow-hidden bg-white shadow-lg sm:rounded-lg"
                 >
-                <div class="p-6 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 ">
-                    <h3 class="text-2xl font-bold ">My Bookings</h3>
-
+                <div class="p-6 mb-5 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 border-b border-gray-300 shadow">
+                    <h3 class="text-2xl font-bold">My Bookings</h3>
                 </div>
 
                 <div class="px-6 pb-6 overflow-x-auto bg-white shadow-md rounded-lg mt-0">
@@ -311,31 +310,6 @@ export default {
                 active: false,
             }),
 
-            view_trip: useForm({
-                burial_plot: {
-                    plot_number: null,
-                    size: null,
-                    status: null,
-                    burial_type_name: null,
-                },
-                client: {
-                    full_name: null,
-                    contact_number: null,
-                    address: null,
-                },
-                deceased: {
-                    birth_date: null,
-                    burial_date: null,
-                    cause_of_death: null,
-                    death_date: null,
-                    full_name: null,
-                },
-                code: null,
-                mode_of_payment: null,
-                status: null,
-                active: false,
-            }),
-
             search: '',
 
             routes: [
@@ -394,47 +368,6 @@ export default {
         },
         selectSeat(item) {
             this.form.seat_number = item
-        },
-        viewItem(item) {
-            this.view_trip.burial_plot.plot_number = item.burial_plot != null ? item.burial_plot.plot_number : ''
-            this.view_trip.burial_plot.size = item.burial_plot != null ? item.burial_plot.size : ''
-            this.view_trip.burial_plot.size = item.burial_plot != null ? item.burial_plot.size : ''
-            this.view_trip.burial_plot.status = item.burial_plot != null ? item.burial_plot.status : ''
-            this.view_trip.burial_plot.burial_type_name = item.burial_plot != null && item.burial_plot.burial_type != null ? item.burial_plot.burial_type.name : ''
-            this.view_trip.client.full_name = item.client != null ? item.client.full_name : ''
-            this.view_trip.client.contact_number = item.client != null ? item.client.contact_number : ''
-            this.view_trip.client.address = item.client != null ? item.client.address : ''
-            this.view_trip.deceased.birth_date = item.deceased != null ? item.deceased.birth_date : ''
-            this.view_trip.deceased.burial_date = item.deceased != null ? item.deceased.burial_date : ''
-            this.view_trip.deceased.cause_of_death = item.deceased != null ? item.deceased.cause_of_death : ''
-            this.view_trip.deceased.death_date = item.deceased != null ? item.deceased.death_date : ''
-            this.view_trip.deceased.full_name = item.deceased != null ? item.deceased.full_name : ''
-            this.view_trip.payments = item.payments
-            this.view_trip.code = item.code
-            this.view_trip.mode_of_payment = item.mode_of_payment
-            this.view_trip.status = item.status
-            this.view_trip.active = true
-        },
-
-        closeViewItem() {
-            this.view_trip.burial_plot.plot_number = null
-            this.view_trip.burial_plot.size = null
-            this.view_trip.burial_plot.size = null
-            this.view_trip.burial_plot.status = null
-            this.view_trip.burial_plot.burial_type_name = null
-            this.view_trip.client.full_name = null
-            this.view_trip.client.contact_number = null
-            this.view_trip.client.address = null
-            this.view_trip.deceased.birth_date = null
-            this.view_trip.deceased.burial_date = null
-            this.view_trip.deceased.cause_of_death = null
-            this.view_trip.deceased.death_date = null
-            this.view_trip.deceased.full_name = null
-            this.view_trip.payments = []
-            this.view_trip.code = null
-            this.view_trip.mode_of_payment = null
-            this.view_trip.status = null
-            this.view_trip.active = false
         },
 
         openStatusForm(item, status) {

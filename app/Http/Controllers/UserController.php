@@ -32,6 +32,7 @@ class UserController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->contact_number = $request->contact_number;
         $user->password = bcrypt($request->password);
         $user->role = $request->role;
         $user->save();
@@ -50,6 +51,7 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->contact_number = $request->contact_number;
         $user->role = $request->role;
 
         // Update password only if provided
