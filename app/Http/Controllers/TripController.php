@@ -15,7 +15,17 @@ class TripController extends Controller
      */
     public function index()
     {
-        $trips = Trip::all();
+        $trips = Trip::with(['bookings' => function ($query) {
+            $query->where('status', 'confirmed');
+        }])->whereIn('status', ['scheduled', 'ongoing'])
+        ->orderBy('departure_date', 'asc')
+        ->get()
+        ->map(function ($trip) {
+            $trip->total_seats = $trip->vehicle->capacity ?? 0; // Assuming 'total_seats' column exists
+            $trip->seats_available = $trip->total_seats - $trip->bookings->count();
+            return $trip;
+        });
+
         $vehicles = Vehicle::all();
         $drivers = Driver::all();
 

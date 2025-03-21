@@ -123,6 +123,7 @@
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Trip</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Route</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Vehicle</th>
+                                <th class="px-4 py-2 text-left text-gray-700 border-b">Seat #</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Driver</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Travel Date</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Status</th>
@@ -135,11 +136,12 @@
                                 <td class="px-4 py-2">{{ item.trip != null ? item.trip.trip_code : '' }}</td>
                                 <td class="px-4 py-2">{{ item.trip != null ? item.trip.origin : '' }} -> {{ item.trip != null ? item.trip.destination : '' }}</td>
                                 <td class="px-4 py-2">{{ item.trip != null && item.trip.vehicle != null ? item.trip.vehicle.plate_number : '' }}</td>
+                                <td class="px-4 py-2">{{ item.seat_number }}</td>
                                 <td class="px-4 py-2">{{ item.trip != null && item.trip.driver != null ? item.trip.driver.full_name : '' }}</td>
                                 <td class="px-4 py-2">{{ item.trip != null ? item.trip.departure_date : '' }} | {{ item.trip != null ? item.trip.departure_time_v : '' }}</td>
                                 <td class="px-4 py-2">{{ item.status }}</td>
                                 <td class="px-4 py-2 flex space-x-2">
-                                    <button @click="showQR(item)" v-if="item.status === 'confirmed' || item.status === 'completed'" type="button" class="text-white bg-indigo-500 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center me-2">
+                                    <button @click="showQR(item)" v-if="item.status != 'canceled' || item.status === 'completed'" type="button" class="text-white bg-indigo-500 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center me-2">
                                         <svg class="w-6 h-6 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M4 4h6v6H4V4Zm10 10h6v6h-6v-6Zm0-10h6v6h-6V4Zm-4 10h.01v.01H10V14Zm0 4h.01v.01H10V18Zm-3 2h.01v.01H7V20Zm0-4h.01v.01H7V16Zm-3 2h.01v.01H4V18Zm0-4h.01v.01H4V14Z"/>
                                         <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M7 7h.01v.01H7V7Zm10 10h.01v.01H17V17Z"/>
@@ -161,7 +163,7 @@
 
         <!-- Main modal -->
         <div  v-if="form.active" id="default-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
-            <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <div class="relative p-4 w-full max-w-5xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow-sm ">
                     <!-- Modal header -->

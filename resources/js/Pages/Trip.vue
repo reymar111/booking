@@ -96,8 +96,13 @@
                                     <span>New Item</span>
                             </button>
 
+
+
                             <!-- header -->
                             <div class="flex items-center space-x-2 w-full md:w-auto">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 ">Travel Date</label>
+                                <input v-model="travel_date" type="date" name="email" @change="filterTrips" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required />
+
                                 <input
                                     type="text"
                                     placeholder="Search..."
@@ -125,6 +130,9 @@
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Vehicle</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Driver</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Travel Date</th>
+                                <th class="px-4 py-2 text-left text-gray-700 border-b">Total Seats</th>
+                                <th class="px-4 py-2 text-left text-gray-700 border-b">Available Seats</th>
+                                <th class="px-4 py-2 text-left text-gray-700 border-b">Status</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Actions</th>
                             </tr>
                         </thead>
@@ -135,20 +143,23 @@
                                 <td class="px-4 py-2">{{ item.origin }} -> {{ item.destination }}</td>
                                 <td class="px-4 py-2">{{ item.vehicle != null ? item.vehicle.plate_number+'-'+item.vehicle.brand+' '+item.vehicle.model : '' }}</td>
                                 <td class="px-4 py-2">{{ item.driver != null ? item.driver.full_name : '' }}</td>
-                                <td class="px-4 py-2">{{ item.departure_date }}-{{ item.departure_time }}</td>
+                                <td class="px-4 py-2">{{ item.departure_date_v }} || {{ item.departure_time_v }}</td>
+                                <td class="px-4 py-2">{{ item.total_seats }}</td>
+                                <td class="px-4 py-2">{{ item.seats_available }}</td>
+                                <td class="px-4 py-2">{{ item.status }}</td>
                                 <td class="px-4 py-2 flex space-x-2">
-                                    <button v-if="item.status != 'Pending'" @click="viewItem(item)" type="button" class="text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center me-2">
+                                    <button @click="viewItem(item)" type="button" class="text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center me-2">
                                     <svg class="w-6 h-6 text-white-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
                                     </svg>
                                         View
                                     </button>
-                                    <button v-if="item.status === 'Pending'" @click="openStatusForm(item, 'Confirmed')" type="button" class="text-white bg-indigo-500 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center me-2">
+                                    <button v-if="item.status === 'ongoing'" @click="openStatusForm(item, 'Confirmed')" type="button" class="text-white bg-indigo-500 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center me-2">
                                         <svg class="w-6 h-6 text-black-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
                                         </svg>
 
-                                        Confirm
+                                        Done
                                     </button>
                                     <button v-if="item.status === 'Pending'" @click="openStatusForm(item, 'Canceled')" type="button" class="text-white bg-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center me-2">
                                         <svg class="w-6 h-6 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -351,45 +362,28 @@
                         <div class="border border-gray-300 rounded-lg shadow-sm p-4">
                             <h4 class="text-lg font-semibold mb-3">Client Details</h4>
                             <table class="min-w-full border border-gray-200">
-                                <tr class="border-b">
-                                    <td class="font-medium">Name:</td>
-                                    <td>{{ view_trip.client.full_name }}</td></tr>
-                                <tr class="border-b">
-                                    <td class="font-medium">Contact:</td>
-                                    <td>{{ view_trip.client.contact_number }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-medium">Address:</td><td>{{ view_trip.client.address }}</td></tr>
-                            </table>
-
-                            <h4 class="mt-7 text-lg font-semibold mb-3">Deceased Details</h4>
-                            <table class="min-w-full border border-gray-200">
-                                <tr class="border-b"><td class="font-medium">Name:</td><td>{{ view_trip.deceased.full_name }}</td></tr>
-                                <tr class="border-b"><td class="font-medium">Birth Date:</td><td>{{ view_trip.deceased.birth_date }}</td></tr>
-                                <tr><td class="font-medium">Death Date:</td><td>{{ view_trip.deceased.death_date }}</td></tr>
-                                <tr><td class="font-medium">Burial Date:</td><td>{{ view_trip.deceased.burial_date }}</td></tr>
-                                <tr><td class="font-medium">Cause of Death:</td><td>{{ view_trip.deceased.cause_of_death }}</td></tr>
+                                <tr class="border-b"><td class="font-medium">Route:</td><td>{{ view_trip.route }}</td></tr>
+                                <tr class="border-b"><td class="font-medium">Vehicle:</td><td>{{ view_trip.vehicle }}</td></tr>
+                                <tr class="border-b"><td class="font-medium">Driver:</td><td>{{ view_trip.driver }}</td></tr>
+                                <tr class="border-b"><td class="font-medium">Travel Date:</td><td>{{ view_trip.travel_date }}</td></tr>
+                                <tr class="border-b"><td class="font-medium">Status:</td><td>{{ view_trip.status }}</td></tr>
                             </table>
                         </div>
 
-                        <!-- Table 2 -->
                         <div class="border border-gray-300 rounded-lg shadow-sm p-4">
-                            <h4 class="text-lg font-semibold mb-3">Payment Details</h4>
+                            <h4 class="text-lg font-semibold mb-3">Passenger Details</h4>
                             <table class="min-w-full border border-gray-200">
                                 <thead class="bg-gray-100">
                                     <tr>
-                                        <th class="px-4 py-2 text-left text-gray-700 border-b">#</th>
-                                        <th class="px-4 py-2 text-left text-gray-700 border-b">Amount</th>
-                                        <th class="px-4 py-2 text-left text-gray-700 border-b">Paid on</th>
+                                        <th class="px-4 py-2 text-left text-gray-700 border-b">Seat #</th>
+                                        <th class="px-4 py-2 text-left text-gray-700 border-b">Passenger</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="border-b" v-for="(item, index) in view_trip.payments" :key="index">
-                                        <td class="px-4 py-2">{{ index + 1 }}</td>
-                                        <td class="px-4 py-2">{{ item.amount }}</td>
-                                        <td class="px-4 py-2">{{ item.created_at }}</td>
+                                    <tr class="border-b" v-for="(item, index) in view_trip.passengers" :key="index">
+                                        <td class="px-4 py-2">{{ item.seat_number }}</td>
+                                        <td class="px-4 py-2">{{ item.user != null ? item.user.name : '' }}</td>
                                     </tr>
-
                                 </tbody>
                             </table>
                         </div>
@@ -461,31 +455,18 @@ export default {
             }),
 
             view_trip: useForm({
-                burial_plot: {
-                    plot_number: null,
-                    size: null,
-                    status: null,
-                    burial_type_name: null,
-                },
-                client: {
-                    full_name: null,
-                    contact_number: null,
-                    address: null,
-                },
-                deceased: {
-                    birth_date: null,
-                    burial_date: null,
-                    cause_of_death: null,
-                    death_date: null,
-                    full_name: null,
-                },
-                code: null,
-                mode_of_payment: null,
+                passengers: [],
+                route: null,
+                vehicle: null,
+                driver: null,
+                travel_date: null,
                 status: null,
                 active: false,
             }),
 
             search: '',
+
+            travel_date: null,
 
             routes: [
                 {key: 'Tabuk', value: 'Tabuk'},
@@ -506,54 +487,37 @@ export default {
     },
     computed: {
         filteredTrips() {
-            if (!this.search) return this.trips;
+            return this.trips.filter(trip => {
+                // Filter by travel_date if selected
+                const matchesDate = !this.travel_date || trip.departure_date === this.travel_date;
 
-            return this.trips.filter(res => {
-                return Object.values(res).some(value =>
+                // Filter by search term
+                const matchesSearch = !this.search || Object.values(trip).some(value =>
                     String(value).toLowerCase().includes(this.search.toLowerCase())
                 );
+
+                return matchesDate && matchesSearch; // Ensure both conditions are met
             });
         }
+
     },
     methods: {
         viewItem(item) {
-            this.view_trip.burial_plot.plot_number = item.burial_plot != null ? item.burial_plot.plot_number : ''
-            this.view_trip.burial_plot.size = item.burial_plot != null ? item.burial_plot.size : ''
-            this.view_trip.burial_plot.size = item.burial_plot != null ? item.burial_plot.size : ''
-            this.view_trip.burial_plot.status = item.burial_plot != null ? item.burial_plot.status : ''
-            this.view_trip.burial_plot.burial_type_name = item.burial_plot != null && item.burial_plot.burial_type != null ? item.burial_plot.burial_type.name : ''
-            this.view_trip.client.full_name = item.client != null ? item.client.full_name : ''
-            this.view_trip.client.contact_number = item.client != null ? item.client.contact_number : ''
-            this.view_trip.client.address = item.client != null ? item.client.address : ''
-            this.view_trip.deceased.birth_date = item.deceased != null ? item.deceased.birth_date : ''
-            this.view_trip.deceased.burial_date = item.deceased != null ? item.deceased.burial_date : ''
-            this.view_trip.deceased.cause_of_death = item.deceased != null ? item.deceased.cause_of_death : ''
-            this.view_trip.deceased.death_date = item.deceased != null ? item.deceased.death_date : ''
-            this.view_trip.deceased.full_name = item.deceased != null ? item.deceased.full_name : ''
-            this.view_trip.payments = item.payments
-            this.view_trip.code = item.code
-            this.view_trip.mode_of_payment = item.mode_of_payment
+            this.view_trip.passengers = item.bookings
+            this.view_trip.route = item.origin+' -> '+item.destination
+            this.view_trip.vehicle = item.vehicle != null ? item.vehicle.plate_number+'-'+item.vehicle.brand+' '+item.vehicle.model : ''
+            this.view_trip.driver = item.driver != null ? item.driver.full_name : ''
+            this.view_trip.travel_date = item.departure_date_v+'-'+item.departure_time_v
             this.view_trip.status = item.status
             this.view_trip.active = true
         },
 
         closeViewItem() {
-            this.view_trip.burial_plot.plot_number = null
-            this.view_trip.burial_plot.size = null
-            this.view_trip.burial_plot.size = null
-            this.view_trip.burial_plot.status = null
-            this.view_trip.burial_plot.burial_type_name = null
-            this.view_trip.client.full_name = null
-            this.view_trip.client.contact_number = null
-            this.view_trip.client.address = null
-            this.view_trip.deceased.birth_date = null
-            this.view_trip.deceased.burial_date = null
-            this.view_trip.deceased.cause_of_death = null
-            this.view_trip.deceased.death_date = null
-            this.view_trip.deceased.full_name = null
-            this.view_trip.payments = []
-            this.view_trip.code = null
-            this.view_trip.mode_of_payment = null
+            this.view_trip.passengers = []
+            this.view_trip.route = null
+            this.view_trip.vehicle = null
+            this.view_trip.driver = null
+            this.view_trip.travel_date = null
             this.view_trip.status = null
             this.view_trip.active = false
         },
