@@ -161,7 +161,7 @@
 
         </div>
 
-        <!-- Main modal -->
+        <!-- MAIN FORM -->
         <div  v-if="form.active" id="default-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
             <div class="relative p-4 w-full max-w-5xl max-h-full">
                 <!-- Modal content -->
@@ -229,7 +229,7 @@
             </div>
         </div>
 
-        <!-- Main modal -->
+        <!-- QR CODE MODAL -->
         <div  v-if="qr_form.active" id="default-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
             <div class="relative p-4 w-full max-w-2xl max-h-full">
                 <!-- Modal content -->

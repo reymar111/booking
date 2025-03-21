@@ -2,14 +2,13 @@
     <AuthenticatedLayout>
         <Head title="Reservations" />
 
-        <div class="py-1">
+        <div class="py-12">
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div
                     class="overflow-hidden bg-white shadow-lg sm:rounded-lg"
                 >
                 <div class="p-6 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 ">
                     <h3 class="text-2xl font-bold ">Reservations</h3>
-
                 </div>
 
                 <div class="px-6 pb-6 overflow-x-auto bg-white shadow-md rounded-lg mt-0">

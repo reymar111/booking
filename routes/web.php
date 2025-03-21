@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', [TripController::class, 'store'])->name('trip.store');
         Route::patch('/update/{trip}', [TripController::class, 'update'])->name('trip.update');
         Route::delete('/destroy/{trip}', [TripController::class, 'destroy'])->name('trip.destroy');
+        Route::patch('/update_status/{trip}', [TripController::class, 'updateStatus'])->name('trip.update_status');
     });
 
     // booking

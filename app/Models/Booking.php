@@ -10,6 +10,8 @@ class Booking extends Model
 
     protected $with = ['user', 'trip'];
 
+    protected $fillable = ['status'];
+
     public function user()
     {
 

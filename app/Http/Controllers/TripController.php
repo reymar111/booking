@@ -99,4 +99,18 @@ class TripController extends Controller
 
         return to_route('trip.index');
     }
+
+    public function updateStatus(Trip $trip, Request $request)
+    {
+
+
+        $trip->update(['status' => $request->status]);
+
+        if ($trip->status === 'completed') {
+            $trip->bookings()->where('status', 'confirmed')->update(['status' => 'completed']);
+        }
+
+        return to_route('trip.index');
+
+    }
 }

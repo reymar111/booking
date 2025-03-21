@@ -13,6 +13,8 @@ class Trip extends Model
 
     protected $appends = ['departure_time_v', 'departure_date_v'];
 
+    protected $fillable = ['status'];
+
     public function vehicle()
     {
 
