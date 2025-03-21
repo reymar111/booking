@@ -54,6 +54,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', [BookingController::class, 'store'])->name('booking.store');
         Route::patch('/update/{booking}', [BookingController::class, 'update'])->name('booking.update');
         Route::delete('/destroy/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
+
+    });
+
+    Route::prefix('update_booking')->middleware('isAdminOrStaff')->group(function() {
         Route::patch('/accept/{booking}', [BookingController::class, 'accept'])->name('booking.accept');
         Route::patch('/cancel/{booking}', [BookingController::class, 'cancel'])->name('booking.cancel');
     });
@@ -101,7 +105,7 @@ Route::middleware('auth')->group(function () {
 // REPORTS
 
     // reservation summary
-    Route::prefix('reports')->middleware('  ')->group(function() {
+    Route::prefix('reports')->middleware('isAdminOrStaff')->group(function() {
         Route::get('/reservation_summary', [ReportController::class, 'reservationSummary'])->name('report.reservation_summary');
         Route::post('/reservation_summary', [ReportController::class, 'reservationSummary']);
 

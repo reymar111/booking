@@ -4,25 +4,29 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <div
-        class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0"
-    >
-        <!-- Title -->
-        <div class="text-center text-3xl font-extrabold text-gray-800 sm:text-4xl">
-            Online Booking System
-        </div>
-        <div class="text-center text-lg font-semibold text-gray-600">
-            Northlandia Transport Service Multipurpose Cooperative (NORTRANS MPC)
+<div class="flex min-h-screen items-center justify-center bg-gray-100 p-6">
+    <!-- Container with Two Equal Columns -->
+    <div class="grid w-full max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
+        <!-- Left Column: Title and Description -->
+        <div class="flex flex-col items-center justify-center text-center p-6">
+            <ApplicationLogo/>
+            <div class="text-3xl font-extrabold text-gray-800 sm:text-4xl">
+                Online Booking System
+            </div>
+            <div class="mt-2 text-lg font-semibold text-gray-600">
+                Northlandia Transport Service Multipurpose Cooperative (NORTRANS MPC)
+            </div>
         </div>
 
-        <div
-            class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
-        >
-            <div class="flex flex-col items-center p-6 font-bold text-lg text-gray-700">
-                Sign in to your account
+        <!-- Right Column: Login Form -->
+        <div class="overflow-hidden bg-white px-6 py-8 shadow-md sm:rounded-lg">
+            <div class="flex flex-col items-center p-4 font-bold text-lg text-gray-700">
+                Log in to your account
             </div>
 
             <slot />
         </div>
     </div>
+</div>
+
 </template>

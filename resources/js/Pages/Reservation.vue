@@ -190,9 +190,8 @@ export default {
         },
 
         accept(item) {
-            this.form.patch('/booking/accept/'+item, {
+            this.form.patch('/update_booking/accept/'+item, {
                 onSuccess: () => {
-                    this.closeForm()
                     this.is_confirmed = true
                 },
                 onError: () => {
@@ -202,7 +201,7 @@ export default {
         },
 
         cancelItem(item) {
-            this.form.patch('/booking/cancel/'+item, {
+            this.form.patch('/update_booking/cancel/'+item, {
                 onSuccess: () => {
                     this.is_canceled = true
                 },
