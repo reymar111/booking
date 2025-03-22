@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@admin.com',
                 'password' => bcrypt('1234567890'),
                 'contact_number' => '09123456789',
+                'role' => 'admin',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'staff@staff.com',
                 'password' => bcrypt('1234567890'),
                 'contact_number' => '09123456789',
+                'role' => 'staff',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -42,6 +44,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'passenger@passenger.com',
                 'password' => bcrypt('1234567890'),
                 'contact_number' => '09123456789',
+                'role' => 'passenger',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
