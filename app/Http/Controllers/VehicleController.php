@@ -70,6 +70,10 @@ class VehicleController extends Controller
      */
     public function destroy(Vehicle $vehicle)
     {
+        if ($vehicle->trips()->count() > 0) {
+            return back()->withErrors(['cannot_delete' => 'Vehicle is associated with trips']);
+        }
+
         $vehicle->delete();
 
         return to_route('vehicle.index');

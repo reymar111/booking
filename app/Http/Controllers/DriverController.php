@@ -64,6 +64,10 @@ class DriverController extends Controller
      */
     public function destroy(Driver $driver)
     {
+        if ($driver->trips()->count() > 0) {
+            return back()->withErrors(['cannot_delete' => 'Driver is associated with trips']);
+        }
+
         $driver->delete();
 
         return to_route('driver.index');

@@ -67,6 +67,10 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        if ($user->bookings()->count() > 0) {
+            return back()->withErrors(['cannot_delete' => 'User is associated with bookings']);
+        }
+
 
         $user->delete();
 

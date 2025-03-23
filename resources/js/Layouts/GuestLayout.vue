@@ -20,10 +20,6 @@ import { Link } from '@inertiajs/vue3';
 
         <!-- Right Column: Login Form -->
         <div class="overflow-hidden bg-white px-6 py-8 shadow-md sm:rounded-lg">
-            <div class="flex flex-col items-center p-4 font-bold text-lg text-gray-700">
-                Log in to your account
-            </div>
-
             <slot />
         </div>
     </div>

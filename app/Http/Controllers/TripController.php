@@ -95,6 +95,10 @@ class TripController extends Controller
      */
     public function destroy(Trip $trip)
     {
+        if ($trip->bookings()->count() > 0) {
+            return back()->withErrors(['cannot_delete' => 'Trip is associated with bookings']);
+        }
+
         $trip->delete();
 
         return to_route('trip.index');

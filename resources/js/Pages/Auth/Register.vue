@@ -25,6 +25,10 @@ const submit = () => {
     <GuestLayout>
         <Head title="Register" />
 
+        <div class="flex flex-col items-center p-4 font-bold text-lg text-gray-700 mb-4">
+            Log in to your account
+        </div>
+
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="name" value="Name" />
