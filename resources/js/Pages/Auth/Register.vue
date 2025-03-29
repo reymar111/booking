@@ -26,7 +26,7 @@ const submit = () => {
         <Head title="Register" />
 
         <div class="flex flex-col items-center p-4 font-bold text-lg text-gray-700 mb-4">
-            Log in to your account
+            Register to start your Booking!
         </div>
 
         <form @submit.prevent="submit">

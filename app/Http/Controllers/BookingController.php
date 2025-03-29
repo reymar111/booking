@@ -27,6 +27,7 @@ class BookingController extends Controller
             ['trip.departure_time', 'asc']
         ])
         ->values(); // Reset indexes
+
         $trips = Trip::where(function ($query) {
                         $query->where('departure_date', '>=', now()->toDateString()) // Future dates
                             ->orWhere(function ($query) {

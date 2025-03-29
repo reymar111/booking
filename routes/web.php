@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
     // reservation
     Route::prefix('reservation')->middleware('isAdminOrStaff')->group(function() {
         Route::get('/',[ReservationController::class, 'index'])->name('reservation.index');
+        Route::post('/store', [ReservationController::class, 'store'])->name('reservation.store');
 
     });
     // NEW SETTINGS
