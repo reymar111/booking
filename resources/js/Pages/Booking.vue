@@ -262,6 +262,40 @@
             </div>
         </div>
 
+        <!-- BANNED MODAL -->
+        <div  v-if="isBAnnedUser" id="default-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
+            <div class="relative p-4 w-full max-w-2xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow-sm ">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                        <h3 class="text-xl font-semibold text-gray-900 ">
+                            Account Banned!
+                        </h3>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4 w-full flex items-center justify-center">
+                        <div class="flex justify-center">
+                            Administrator has restricted your access to the System. Please proceed to Northlandia Office to settle your account.
+                        </div>
+                    </div>
+
+                     <!-- Modal footer -->
+                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+                        <Link
+                            :href="route('logout')" method="post"
+                            class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                        >
+                        <svg class="w-6 h-6 text-red-800 dark:text-white"  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/>
+                        </svg>
+                            <span class="ml-3">Logout</span>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </AuthenticatedLayout>
 </template>
 
@@ -303,6 +337,8 @@ export default {
             is_confirmed: false,
             is_canceled: false,
 
+            is_banned: false,
+
             selected_trip: useForm({
                 id: null,
                 code: null,
@@ -328,8 +364,6 @@ export default {
                 passenger: null,
             }
 
-
-
         }
     },
     mounted() {
@@ -348,6 +382,10 @@ export default {
 
         computeAvailableSeat() {
             return this.form.trip_id != '' ? this.trips.find(item => item.id === this.form.trip_id).available_seats : ''
+        },
+
+        isBAnnedUser() {
+            return this.$page.props.auth.user.banned
         }
     },
     methods: {

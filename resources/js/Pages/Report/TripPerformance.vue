@@ -48,7 +48,7 @@
                             <tr class="border-b" v-for="(item, index) in data" :key="index">
                                 <td class="px-4 py-2">{{ index + 1 }}</td>
                                 <td class="px-4 py-2">{{ item.origin }} -> {{item.destination}}</td>
-                                <td class="px-4 py-2">{{ item.schedule_trips }}</td>
+                                <td class="px-4 py-2">{{ item.scheduled_trips }}</td>
                                 <td class="px-4 py-2">{{ item.ongoing_trips }}</td>
                                 <td class="px-4 py-2">{{ item.completed_trips }}</td>
                                 <td class="px-4 py-2">{{ item.canceled_trips }}</td>

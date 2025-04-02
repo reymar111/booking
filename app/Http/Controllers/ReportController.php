@@ -163,6 +163,7 @@ class ReportController extends Controller
                 DB::raw("(vehicles.capacity - COUNT(bookings.id)) as available_seats"),
                 DB::raw("ROUND((COUNT(bookings.id) / vehicles.capacity) * 100, 2) as load_percentage")
             )
+            ->where('bookings.status', '!=', 'canceled') // Filter only completed bookings
             ->groupBy(
                 'trips.id',
                 'trips.origin',

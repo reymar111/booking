@@ -38,10 +38,10 @@
                                 <td class="border border-gray-200 px-4 py-2">Completed Reservations</td>
                                 <td class="border border-gray-200 px-4 py-2">{{data.completed_reservations}}</td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <td class="border border-gray-200 px-4 py-2">Completed Reservations</td>
                                 <td class="border border-gray-200 px-4 py-2">{{data.completed_reservations}}</td>
-                            </tr>
+                            </tr> -->
                             <tr>
                                 <td class="border border-gray-200 px-4 py-2">Confirmed Reservations</td>
                                 <td class="border border-gray-200 px-4 py-2">{{data.confirmed_reservations}}</td>

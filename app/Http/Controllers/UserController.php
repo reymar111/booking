@@ -53,6 +53,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->contact_number = $request->contact_number;
         $user->role = $request->role;
+        $user->banned = $request->banned;
 
         // Update password only if provided
         if ($request->filled('password')) {

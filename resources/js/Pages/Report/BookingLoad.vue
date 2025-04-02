@@ -1,13 +1,13 @@
 
 <template>
     <AuthenticatedLayout>
-        <Head title="Reports / Driver Activity" />
+        <Head title="Reports / Booking Load" />
 
         <div class="py-1">
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-lg sm:rounded-lg">
                     <div class="p-6 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 ">
-                        <h3 class="text-2xl font-bold ">Reports - Driver Activity</h3>
+                        <h3 class="text-2xl font-bold ">Reports - Booking Load</h3>
 
                             <!-- header -->
                             <div class="flex items-center space-x-2 w-full md:w-auto">
@@ -37,6 +37,7 @@
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Travel Date</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Plate Number</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Capacity</th>
+                                <th class="px-4 py-2 text-left text-gray-700 border-b">Available Seats</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Total Bookings</th>
 
                             </tr>

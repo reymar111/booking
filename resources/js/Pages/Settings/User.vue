@@ -101,6 +101,7 @@
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">#</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Name</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Role</th>
+                                <th class="px-4 py-2 text-left text-gray-700 border-b">Status</th>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">Actions</th>
                             </tr>
                         </thead>
@@ -109,6 +110,7 @@
                                 <td class="px-4 py-2">{{ index + 1 }}</td>
                                 <td class="px-4 py-2">{{ item.name }}</td>
                                 <td class="px-4 py-2">{{ item.role }}</td>
+                                <td class="px-4 py-2">{{ item.banned ? 'Banned' : 'Active' }}</td>
                                 <td class="px-4 py-2 flex space-x-2">
                                     <button @click="editItem(item)" type="button" class="text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center me-2">
                                     <svg class="w-6 h-6 text-white-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -174,7 +176,10 @@
                                 <option v-for="(item, index) in roles" :key="index" :value="item.key">{{item.value }}</option>
                             </select>
                         </div>
-
+                        <div v-if="form.role === 'passenger'">
+                            <input id="default-checkbox" v-model="form.banned" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ban user access</label>
+                        </div>
 
                     </div>
                     <!-- Modal footer -->
@@ -243,6 +248,7 @@ export default {
                 email: '',
                 password: '',
                 role: '',
+                banned: false,
                 contact_number: '',
                 active: false,
                 is_editing: false,
@@ -290,6 +296,7 @@ export default {
             this.form.id = ''
             this.form.name = ''
             this.form.email = ''
+            this.form.banned = false
             this.form.contact_number = ''
             this.form.password = ''
             this.form.role = ''
@@ -301,6 +308,7 @@ export default {
             this.form.id = ''
             this.form.name = ''
             this.form.email = ''
+            this.form.banned = false
             this.form.password = ''
             this.form.contact_number = ''
             this.form.role = ''
@@ -312,6 +320,7 @@ export default {
             this.form.id = item.id
             this.form.name = item.name
             this.form.email = item.email
+            this.form.banned = item.banned
             this.form.role = item.role
             this.form.contact_number = item.contact_number
             this.form.active = true

@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('1234567890'),
                 'contact_number' => '09123456789',
                 'role' => 'admin',
+                'banned' => false,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -36,6 +37,7 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('1234567890'),
                 'contact_number' => '09123456789',
                 'role' => 'staff',
+                'banned' => false,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -45,6 +47,7 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('1234567890'),
                 'contact_number' => '09123456789',
                 'role' => 'passenger',
+                'banned' => false,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
