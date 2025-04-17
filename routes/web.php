@@ -105,8 +105,10 @@ Route::middleware('auth')->group(function () {
 
 // REPORTS
 
-    // reservation summary
     Route::prefix('reports')->middleware('isAdminOrStaff')->group(function() {
+        Route::get('/passenger_summary', [ReportController::class, 'passengerSummary'])->name('report.passenger_summary');
+        Route::post('/passenger_summary', [ReportController::class, 'passengerSummary']);
+
         Route::get('/reservation_summary', [ReportController::class, 'reservationSummary'])->name('report.reservation_summary');
         Route::post('/reservation_summary', [ReportController::class, 'reservationSummary']);
 

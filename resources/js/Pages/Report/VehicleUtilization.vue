@@ -25,11 +25,17 @@
                                     <span>Filter</span>
                                 </button>
 
+                                <!-- <button @click="printReport" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center space-x-2">
+                                    <svg class="w-6 h-6 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M16.444 18H19a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h2.556M17 11V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v6h10ZM7 15h10v4a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4Z"/>
+                                    </svg>
+                                </button> -->
+
                             </div>
                     </div>
 
 
-                    <table class="min-w-full border border-gray-200">
+                    <table ref="printTable" class="min-w-full border border-gray-200">
                         <thead class="bg-gray-100">
                             <tr>
                                 <th class="px-4 py-2 text-left text-gray-700 border-b">#</th>
@@ -89,6 +95,49 @@ export default {
                 start_date: this.start_date,
                 end_date: this.end_date
             });
+        },
+
+        printReport() {
+            const table = this.$refs.printTable;
+            const printWindow = window.open('', '', 'width=1000,height=800');
+
+            const style = `
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        padding: 20px;
+                    }
+                    h1 {
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        border: 1px solid #ccc;
+                        padding: 8px;
+                        text-align: left;
+                    }
+                    th {
+                        background-color: #f3f4f6;
+                    }
+                </style>
+            `;
+
+            const title = `<h1>Passenger Summary Report</h1>`;
+            const html = `${style}${title}${table.outerHTML}`;
+
+            printWindow.document.write(html);
+            printWindow.document.close();
+
+            // Wait for the content to be fully loaded before printing
+            printWindow.onload = function () {
+                printWindow.focus();
+                printWindow.print();
+                // printWindow.close();
+            };
         }
     }
 }

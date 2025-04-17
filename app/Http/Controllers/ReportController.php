@@ -3,11 +3,32 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
+    public function passengerSummary(Request $request)
+    {
+        // Retrieve date range from request
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $data = Booking::with(['trip', 'user']) // eager load related trip and user
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                $query->whereHas('trip', function ($tripQuery) use ($startDate, $endDate) {
+                    $tripQuery->whereBetween('departure_date', [$startDate, $endDate]);
+                });
+            })
+            ->get();
+
+        return Inertia::render('Report/PassengerSummary', [
+            'data' => $data,
+        ]);
+
+    }
+
     public function reservationSummary(Request $request)
     {
 

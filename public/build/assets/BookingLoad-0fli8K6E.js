@@ -1,0 +1,24 @@
+import{m as g,P as y,p,c as h,o as l,w as _,a as w,b as t,i as u,j as c,f as b,F as k,q as v,t as o}from"./app-nnnvBFJW.js";import{A as T}from"./AuthenticatedLayout-DRcgFkbp.js";import{_ as B}from"./_plugin-vue_export-helper-DlAUqK2U.js";/* empty css            */const L={props:["data"],components:{AuthenticatedLayout:T,Link:y,Head:g},data(){return{start_date:null,end_date:null}},mounted(){},computed:{},methods:{filterData(){this.$inertia.post("/reports/vehicle_utilization",{start_date:this.start_date,end_date:this.end_date})},printReport(){const a=this.$refs.printTable,e=window.open("","","width=1000,height=800"),r=`
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        padding: 20px;
+                    }
+                    h1 {
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        border: 1px solid #ccc;
+                        padding: 8px;
+                        text-align: left;
+                    }
+                    th {
+                        background-color: #f3f4f6;
+                    }
+                </style>
+            <h1>Booking Load Report</h1>${a.outerHTML}`;e.document.write(r),e.document.close(),e.onload=function(){e.focus(),e.print()}}}},C={class:"py-1"},A={class:"mx-auto sm:px-6 lg:px-8"},D={class:"overflow-hidden bg-white shadow-lg sm:rounded-lg"},H={class:"p-6 text-gray-900 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0"},R={class:"flex items-center space-x-2 w-full md:w-auto"},F={ref:"printTable",class:"min-w-full border border-gray-200"},V={class:"px-4 py-2"},q={class:"px-4 py-2"},M={class:"px-4 py-2"},N={class:"px-4 py-2"},P={class:"px-4 py-2"},j={class:"px-4 py-2"},S={class:"px-4 py-2"};function U(a,e,d,x,r,n){const f=p("Head"),m=p("AuthenticatedLayout");return l(),h(m,null,{default:_(()=>[w(f,{title:"Reports / Booking Load"}),t("div",C,[t("div",A,[t("div",D,[t("div",H,[e[8]||(e[8]=t("h3",{class:"text-2xl font-bold"},"Reports - Booking Load",-1)),t("div",R,[e[6]||(e[6]=t("label",{for:"email",class:"mb-0 text-sm font-medium text-gray-900"},"From",-1)),u(t("input",{"onUpdate:modelValue":e[0]||(e[0]=s=>r.start_date=s),type:"date",name:"email",onChange:e[1]||(e[1]=(...s)=>a.filterTrips&&a.filterTrips(...s)),id:"email",class:"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",required:""},null,544),[[c,r.start_date]]),e[7]||(e[7]=t("label",{for:"email",class:"block mb-0 text-sm font-medium text-gray-900"},"To",-1)),u(t("input",{"onUpdate:modelValue":e[2]||(e[2]=s=>r.end_date=s),type:"date",name:"email",onChange:e[3]||(e[3]=(...s)=>a.filterTrips&&a.filterTrips(...s)),id:"email",class:"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",required:""},null,544),[[c,r.end_date]]),t("button",{onClick:e[4]||(e[4]=(...s)=>n.filterData&&n.filterData(...s)),class:"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"},e[5]||(e[5]=[t("svg",{class:"w-6 h-6 text-white-800 dark:text-white","aria-hidden":"true",xmlns:"http://www.w3.org/2000/svg",width:"24",height:"24",fill:"none",viewBox:"0 0 24 24"},[t("path",{stroke:"currentColor","stroke-linecap":"round","stroke-width":"2",d:"M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"})],-1),t("span",null,"Filter",-1)]))])]),t("table",F,[e[9]||(e[9]=t("thead",{class:"bg-gray-100"},[t("tr",null,[t("th",{class:"px-4 py-2 text-left text-gray-700 border-b"},"#"),t("th",{class:"px-4 py-2 text-left text-gray-700 border-b"},"Route"),t("th",{class:"px-4 py-2 text-left text-gray-700 border-b"},"Travel Date"),t("th",{class:"px-4 py-2 text-left text-gray-700 border-b"},"Plate Number"),t("th",{class:"px-4 py-2 text-left text-gray-700 border-b"},"Capacity"),t("th",{class:"px-4 py-2 text-left text-gray-700 border-b"},"Available Seats"),t("th",{class:"px-4 py-2 text-left text-gray-700 border-b"},"Total Bookings")])],-1)),t("tbody",null,[(l(!0),b(k,null,v(d.data,(s,i)=>(l(),b("tr",{class:"border-b",key:i},[t("td",V,o(i+1),1),t("td",q,o(s.origin)+" -> "+o(s.destination),1),t("td",M,o(s.departure_date)+" || "+o(s.departure_time),1),t("td",N,o(s.plate_number),1),t("td",P,o(s.capacity),1),t("td",j,o(s.available_seats),1),t("td",S,o(s.total_bookings),1)]))),128))])],512)])])])]),_:1})}const Z=B(L,[["render",U]]);export{Z as default};
